@@ -1,0 +1,532 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "User API",
+        "version": "1.0",
+        "description": "User API Spec"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:3000/api"
+        }
+    ],
+    "paths": {
+        "/users/register": {
+            "post": {
+                "description": "Register new User",
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "examples": {
+                                "aufal": {
+                                    "description": "register aufal marom",
+                                    "value": {
+                                        "username": "aufal02",
+                                        "email": "aufal@examples.com",
+                                        "password": "rahasia",
+                                        "nama": "user",
+                                        "nomer_telepon": "+6281789562780",
+                                        "alamat": "Jawa Timur",
+                                        "role": "seller"
+                                    }
+                                }
+                            },
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "username",
+                                    "nama",
+                                    "email",
+                                    "password",
+                                    "nomer_telepon",
+                                    "alamat"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "format": "email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "nama": {
+                                        "type": "string"
+                                    },
+                                    "nomer_telepon": {
+                                        "type": "string"
+                                    },
+                                    "alamat": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "validationerror": {
+                                        "description": "Validation error",
+                                        "value": {
+                                            "errors": {
+                                                "username": [
+                                                    "username must not be blank",
+                                                    "username min 6 caracter"
+                                                ],
+                                                "nama": [
+                                                    "nama must not be blank",
+                                                    "nama min 6 caracter"
+                                                ]
+                                            },
+                                            "message": "register user failed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "201": {
+                        "description": "Success register user",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "success": {
+                                        "description": "register success",
+                                        "value": {
+                                            "errors": "null",
+                                            "message": "register user success"
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "post": {
+                "description": "Login user",
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "examples": {
+                                "aufal": {
+                                    "description": "login aufal marom",
+                                    "value": {
+                                        "username": "aufal02",
+                                        "password": "rahasia"
+                                    }
+                                }
+                            },
+                            "schema": {
+                                "type": "object",
+                                "required": [
+                                    "username",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "validationerror": {
+                                        "description": "Validation error",
+                                        "value": {
+                                            "data": "null",
+                                            "errors": {
+                                                "error_message": "username or password worng"
+                                            },
+                                            "message": "login user failed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success login user",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "success": {
+                                        "description": "login success",
+                                        "value": {
+                                            "data": {
+                                                "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6ImF1ZmFsMDIiLCJpYXQiOjE1MTYyMzkwMjJ9.KXtOzEPc57_RGJjk7c4PydNdaDVZ2Gdks6Gn2TOe2i0"
+                                            },
+                                            "errors": "null",
+                                            "message": "login user success"
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "token": {
+                                                    "format": "jwt",
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/current": {
+            "get": {
+                "description": "Get current user",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt"
+                        },
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "validationerror": {
+                                        "description": "Validation error",
+                                        "value": {
+                                            "data": "null",
+                                            "errors": {
+                                                "error_message": "unAuthorize"
+                                            },
+                                            "message": "get user failed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success Update current user",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "aufal": {
+                                        "description": "succes update user",
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "username": "aufal02",
+                                                "email": "aufal@examples.com",
+                                                "nama": "user",
+                                                "nomer_telepon": "+6281789562780",
+                                                "alamat": "Jawa Timur",
+                                                "role": "seller"
+                                            },
+                                            "errors": "null",
+                                            "message": "success get user with id ${uuid}"
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "format": "uuid",
+                                                    "type": "string"
+                                                },
+                                                "username": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "format": "email",
+                                                    "type": "string"
+                                                },
+                                                "nama": {
+                                                    "type": "string"
+                                                },
+                                                "nomer_telepon": {
+                                                    "type": "string"
+                                                },
+                                                "alamat": {
+                                                    "type": "string"
+                                                },
+                                                "role": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "description": "Update current user",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt"
+                        },
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "aplication/json": {
+                            "examples": {
+                                "aufal": {
+                                    "description": "update aufal marom",
+                                    "value": {
+                                        "username": "aufal02-update",
+                                        "email": "aufal@examples.com",
+                                        "password": "rahasia-update",
+                                        "nama": "user",
+                                        "nomer_telepon": "+6281789562780",
+                                        "alamat": "Jawa Timur"
+                                    }
+                                }
+                            },
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "username": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "format": "email",
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    },
+                                    "nama": {
+                                        "type": "string"
+                                    },
+                                    "nomer_telepon": {
+                                        "type": "string"
+                                    },
+                                    "alamat": {
+                                        "type": "string"
+                                    },
+                                    "role": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "validationerror": {
+                                        "description": "Validation error",
+                                        "value": {
+                                            "data": "null",
+                                            "errors": [
+                                                {
+                                                    "username": "username exits"
+                                                }
+                                            ],
+                                            "message": "update user failed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success Update current user",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "aufal": {
+                                        "description": "update aufal marom",
+                                        "value": {
+                                            "data": {
+                                                "id": "uuid",
+                                                "username": "aufal02-update",
+                                                "email": "aufal@examples.com",
+                                                "password": "rahasia-update",
+                                                "nama": "user",
+                                                "nomer_telepon": "+6281789562780",
+                                                "alamat": "Jawa Timur"
+                                            },
+                                            "errors": "null",
+                                            "message": "update user succes"
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "format": "uuid",
+                                                    "type": "string"
+                                                },
+                                                "username": {
+                                                    "type": "string"
+                                                },
+                                                "email": {
+                                                    "format": "email",
+                                                    "type": "string"
+                                                },
+                                                "nama": {
+                                                    "type": "string"
+                                                },
+                                                "nomer_telepon": {
+                                                    "type": "string"
+                                                },
+                                                "alamat": {
+                                                    "type": "string"
+                                                },
+                                                "role": {
+                                                    "type": "string"
+                                                }
+                                            }
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "delete": {
+                "description": "logout user",
+                "parameters": [
+                    {
+                        "schema": {
+                            "type": "string",
+                            "format": "jwt"
+                        },
+                        "name": "Authorization",
+                        "in": "header"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Validation error",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "validationerror": {
+                                        "description": "Validation error",
+                                        "value": {
+                                            "errors": {
+                                                "error_message": "token not validate"
+                                            },
+                                            "message": "logout user failed"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Success login user",
+                        "content": {
+                            "aplication/json": {
+                                "examples": {
+                                    "success": {
+                                        "description": "login success",
+                                        "value": {
+                                            "errors": "null",
+                                            "message": "log out user success"
+                                        }
+                                    }
+                                },
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "errors": {
+                                            "type": "object"
+                                        },
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

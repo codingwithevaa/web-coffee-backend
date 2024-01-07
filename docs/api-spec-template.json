@@ -1,0 +1,46 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "coffe-web API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:{port}/{basePath}",
+            "description": "development",
+            "variables": {
+                "port": {
+                    "default": "3000"
+                },
+                "basePath": {
+                    "default": "api"
+                }
+            }
+        }
+    ],
+    "tags": [],
+    "components": {
+        "securitySchemes": {},
+        "examples": {},
+        "schemas": {}
+    },
+    "paths": {
+        "/orders": {
+            "description": "endpoint for add menu, [user seller]",
+            "post": {}
+        },
+        "/users/login": {
+            "description": "endpoint for user login",
+            "post": {}
+        },
+        "/users/profile": {
+            "description": "endpoint for user details & update user profile",
+            "get": {},
+            "patch": {}
+        },
+        "/users/logout": {
+            "description": "endpoint for user details & update user profile",
+            "delete":{}
+        }
+    }
+}

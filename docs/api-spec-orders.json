@@ -1,0 +1,108 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "coffe-web API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:{port}/{basePath}",
+            "description": "development",
+            "variables": {
+                "port": {
+                    "default": "3000"
+                },
+                "basePath": {
+                    "default": "api"
+                }
+            }
+        }
+    ],
+    "tags": [
+        {
+            "name": "orders",
+            "description": "The orders managing API"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "examples": {},
+        "schemas": {
+            "orders": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "order_id",
+                    "user_id",
+                    "menu_id",
+                    "quantity",
+                    "total_harga"
+                ],
+                "properties": {
+                    "order_id": {},
+                    "user_id": {},
+                    "menu_id": {},
+                    "quantity": {},
+                    "total_harga": {}
+                }
+            }
+        }
+    },
+    "paths": {
+        "/orders": {
+            "description": "endpoint untuk menambahkan sebuah orderan",
+            "post": {
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "requestBody": {},
+                "responses": {
+                    "200": {},
+                    "400": {},
+                    "default": {}
+                }
+            },
+            "get": {
+                "tags": [
+                    "orders"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "requestBody": {},
+                "responses": {
+                    "200": {},
+                    "400": {},
+                    "default": {}
+                }
+            }
+        },
+        "/orders/{order_id}": {
+            "description": "endpoint untuk melihat detai orderan",
+            "get":{},
+            "delete":{}
+        },
+        "/orders/{user_id}": {
+            "description": "endpoint untuk melihat orderan dari user tertentu",
+            "get":{},
+            "delete":{}
+        },
+        "/orders/{user_id}/{order_id}": {
+            "description": "endpoint for detail order user",
+            "get":{},
+            "delete":{}
+        }
+    }
+}

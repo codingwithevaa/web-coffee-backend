@@ -1,0 +1,597 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "coffe-web API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "https://localhost:{port}/{basePath}",
+            "description": "development",
+            "variables": {
+                "port": {
+                    "default": "3000"
+                },
+                "basePath": {
+                    "default": "api"
+                }
+            }
+        }
+    ],
+    "tags": [
+        {
+            "name": "users",
+            "description": "The user managing API"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        },
+        "examples": {
+            "userRequestBodyRegisterExample": {
+                "description": "requestBody user",
+                "value": {
+                    "username": "user",
+                    "email": "user@email.com",
+                    "password": "12345678",
+                    "nama": "user",
+                    "nomer_telepon": "081789562780",
+                    "alamat": "Jawa Timur",
+                    "role": "customer"
+                }
+            },
+            "userRequestBodyUpdateExample": {
+                "description": "requestBody user",
+                "value": {
+                    "username": "use-update",
+                    "email": "user@email.com",
+                    "password": "1234567810901399313"
+                }
+            },
+            "userRequestBodyLoginExample": {
+                "description": "requestBody user",
+                "value": {
+                    "username": "user",
+                    "password": "12345678"
+                }
+            }
+        },
+        "schemas": {
+            "user": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                    "username",
+                    "nama",
+                    "email",
+                    "password",
+                    "nomer_telepon",
+                    "alamat"
+                ],
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                    },
+                    "email": {
+                        "format": "email",
+                        "type": "string",
+                        "maxLength": 30,
+                        "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "hashed",
+                        "pattern": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$"
+                    },
+                    "nama": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9]{3,20}$",
+                        "maxLength": 20
+                    },
+                    "nomer_telepon": {
+                        "type": "string",
+                        "pattern": "^[0-9]*$",
+                        "maxLength": 15
+                    },
+                    "alamat": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9]{3,200}$",
+                        "maxLength": 200
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "customer",
+                            "seller"
+                        ]
+                    }
+                }
+            },
+            "requestLoginSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "hashed",
+                        "pattern": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$"
+                    }
+                }
+            },
+            "responseRegistrasiSuccesSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "pattern": "^[A-Za-z0-9]{3,100}$"
+                    },
+                    "data_user": {
+                        "additionalProperties": false,
+                        "type": "object",
+                        "maxProperties": 10,
+                        "properties": {
+                            "id": {
+                                "type": "string",
+                                "format": "uuid",
+                                "maxLength": 20,
+                                "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                            },
+                            "username": {
+                                "type": "string",
+                                "maxLength": 20,
+                                "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                            },
+                            "email": {
+                                "format": "email",
+                                "type": "string",
+                                "maxLength": 30,
+                                "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+                            },
+                            "nama": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9]{3,20}$",
+                                "maxLength": 20
+                            },
+                            "nomer_telepon": {
+                                "type": "string",
+                                "pattern": "^[0-9]*$",
+                                "maxLength": 15
+                            },
+                            "alamat": {
+                                "type": "string",
+                                "pattern": "^[A-Za-z0-9]{3,200}$",
+                                "maxLength": 200
+                            },
+                            "role": {
+                                "type": "string",
+                                "enum": [
+                                    "customer",
+                                    "seller"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "responseFailedSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "pattern": "^[A-Za-z0-9]{3,100}$"
+                    },
+                    "errors": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "pattern": "^[A-Za-z0-9]{3,100}$"
+                    }
+                }
+            },
+            "responseLoginSuccessSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "pattern": "^[A-Za-z0-9]{3,100}$"
+                    },
+                    "token": {
+                        "type": "string",
+                        "maxLength": 200,
+                        "format": "jwt",
+                        "pattern": "^[A-Za-z0-9]{1,200}$"
+                    }
+                }
+            },
+            "responseGetUserProfileSuccessSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "maxLength": 20,
+                        "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                    },
+                    "username": {
+                        "type": "string",
+                        "maxLength": 20,
+                        "pattern": "^[-\\w\\.\\$@\\*\\!]{1,30}$"
+                    },
+                    "email": {
+                        "format": "email",
+                        "type": "string",
+                        "maxLength": 30,
+                        "pattern": "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$"
+                    },
+                    "password": {
+                        "type": "string",
+                        "format": "hashed",
+                        "pattern": "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,20}$"
+                    },
+                    "nama": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9]{3,20}$",
+                        "maxLength": 20
+                    },
+                    "nomer_telepon": {
+                        "type": "string",
+                        "pattern": "^[0-9]*$",
+                        "maxLength": 15
+                    },
+                    "alamat": {
+                        "type": "string",
+                        "pattern": "^[A-Za-z0-9]{3,200}$",
+                        "maxLength": 200
+                    },
+                    "role": {
+                        "type": "string",
+                        "enum": [
+                            "customer",
+                            "seller"
+                        ]
+                    }
+                }
+            },
+            "responseLogoutUserSuccessSchema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "maxLength": 100,
+                        "pattern": "^[A-Za-z0-9]{3,100}$"
+                    },
+                    "errors": {
+                        "type": "array",
+                        "maxItems": 10,
+                        "items": {
+                            "type": "string",
+                            "pattern": "^[A-Za-z0-9]{3,100}$"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/users/register": {
+            "description": "endpoint for user register",
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {}
+                ],
+                "requestBody": {
+                    "description": "request body for user register",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/user"
+                            },
+                            "examples": {
+                                "user": {
+                                    "$ref": "#/components/examples/userRequestBodyRegisterExample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseRegistrasiSuccesSchema"
+                                },
+                                "examples": {
+                                    "user": {
+                                        "value": {
+                                            "message": "Akun berhasil dibuat, silahkan login!",
+                                            "data_user": {
+                                                "id": "b361b845-7330-4dcb-8e9d-377754ed6380",
+                                                "username": "user",
+                                                "email": "user@email.com",
+                                                "nama": "user",
+                                                "nomer_telepon": "081789562780",
+                                                "alamat": "Jawa Timur",
+                                                "role": "customer"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseFailedSchema"
+                                },
+                                "examples": {
+                                    "user": {
+                                        "value": {
+                                            "message": "Akun gagal dibuat, silahkan ulangi lagi!",
+                                            "errors": "username sudah terdaftar"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseRegistrasiSuccesSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/login": {
+            "description": "endpoint for user login",
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {}
+                ],
+                "requestBody": {
+                    "description": "request body for user login",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/requestLoginSchema"
+                            },
+                            "examples": {
+                                "user": {
+                                    "$ref": "#/components/examples/userRequestBodyLoginExample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseLoginSuccessSchema"
+                                },
+                                "examples": {
+                                    "user": {
+                                        "value": {
+                                            "message": "berhasil login",
+                                            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseFailedSchema"
+                                },
+                                "examples": {
+                                    "user": {
+                                        "value": {
+                                            "message": "akun gagal login",
+                                            "errors": "username or password worng"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseLoginSuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/profile": {
+            "description": "endpoint for user details & update user profile",
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseGetUserProfileSuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseFailedSchema"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseGetUserProfileSuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/user"
+                            },
+                            "examples": {
+                                "user": {
+                                    "$ref": "#/components/examples/userRequestBodyUpdateExample"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseGetUserProfileSuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseFailedSchema"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseGetUserProfileSuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/logout": {
+            "description": "endpoint for user details & update user profile",
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseLogoutUserSuccessSchema"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseFailedSchema"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/responseLogoutUserSuccessSchema"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
